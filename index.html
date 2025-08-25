@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FLOCORE AI v4.16 - Construction Intelligence</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- TailwindCSS now loaded via PostCSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+      @keyframes slide-in-up {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      .animate-slide-in-up {
+        animation: slide-in-up 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+      }
+      @keyframes slide-in-down {
+        from { transform: translateY(-100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      .animate-slide-in-down {
+        animation: slide-in-down 0.25s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+      }
+      
+      @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fade-in {
+        animation: fade-in 0.2s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+      }
+      
+      @keyframes fade-out {
+        from { opacity: 1; }
+        to { opacity: 0; }
+      }
+      .animate-fade-out {
+        animation: fade-out 0.15s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+      }
+      
+      @keyframes fade-in-stagger {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in-stagger {
+          animation: fade-in-stagger 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+          opacity: 0;
+      }
+
+      @keyframes pulse-glow-blue {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+        70% { box-shadow: 0 0 20px 10px rgba(59, 130, 246, 0); }
+      }
+      .animate-pulse-glow-blue {
+        animation: pulse-glow-blue 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      @keyframes pulse-glow-purple {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7); }
+        70% { box-shadow: 0 0 20px 10px rgba(168, 85, 247, 0); }
+      }
+      .animate-pulse-glow-purple {
+        animation: pulse-glow-purple 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      @keyframes thinking-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .animate-thinking-spin {
+          animation: thinking-spin 1s linear infinite;
+      }
+      
+      /* Co-Pilot Nexus Animations */
+      @keyframes nexus-breathe {
+        0%, 100% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.05); opacity: 1; }
+      }
+      .animate-nexus-breathe {
+        animation: nexus-breathe 4s infinite cubic-bezier(0.45, 0, 0.55, 1);
+      }
+      
+      @keyframes nexus-speak-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+      }
+      .animate-nexus-speak-pulse {
+        animation: nexus-speak-pulse 1.2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+      }
+
+      /* Onboarding Animations */
+      @keyframes slide-out-left {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(-20%); opacity: 0; }
+      }
+      .animate-slide-out-left {
+        animation: slide-out-left 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+
+      @keyframes slide-in-right {
+        from { transform: translateX(20%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      .animate-slide-in-right {
+        animation: slide-in-right 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+       /* Onboarding System Check Animation */
+      @keyframes text-focus-in {
+        0% { filter: blur(12px); opacity: 0; }
+        100% { filter: blur(0px); opacity: 1; }
+      }
+      .animate-text-focus-in {
+        animation: text-focus-in 0.6s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+      }
+
+      /* Onboarding Vision Demo Animations */
+      @keyframes scan-line {
+        0% { transform: translateY(-10px); }
+        100% { transform: translateY(calc(100% + 10px)); }
+      }
+      .scan-line {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.7), transparent);
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        animation: scan-line 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+
+      @keyframes fade-in-box {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      .bounding-box {
+        position: absolute;
+        border: 2px solid rgba(0, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        border-radius: 4px;
+        animation: fade-in-box 0.5s ease-out;
+        opacity: 0;
+        animation-fill-mode: forwards;
+      }
+      @keyframes fade-in-label {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .bounding-box-label {
+        position: absolute;
+        bottom: -22px; /* Adjusted for better spacing */
+        left: 0;
+        background-color: rgba(0, 255, 255, 0.8);
+        color: black;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 4px;
+        border-radius: 2px;
+        white-space: nowrap;
+        animation: fade-in-label 0.3s ease-out;
+        opacity: 0;
+        animation-fill-mode: forwards;
+      }
+      
+      @keyframes hud-fade-in {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-hud-fade-in {
+          animation: hud-fade-in 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+      }
+      
+      /* Revised Integration Step Animations */
+      @keyframes processing-ring {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .animate-processing-ring {
+        animation: processing-ring 1.5s linear infinite;
+      }
+      
+      @keyframes data-packet-flow-in {
+        0% { opacity: 0; transform: translateX(-20px) scale(0.8); }
+        50% { opacity: 1; }
+        100% { opacity: 0; transform: translateX(100px) scale(1.2); }
+      }
+      .animate-data-packet-flow-in {
+        animation: data-packet-flow-in 1.5s ease-in-out infinite;
+      }
+      
+       @keyframes data-packet-flow-out {
+        0% { opacity: 0; transform: translateX(0px) scale(1.2); }
+        50% { opacity: 1; }
+        100% { opacity: 0; transform: translateX(120px) scale(0.8); }
+      }
+      .animate-data-packet-flow-out {
+        animation: data-packet-flow-out 1.5s ease-in-out infinite;
+      }
+
+      @keyframes text-block-fade-in {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-text-block-fade-in {
+        animation: text-block-fade-in 0.5s ease-out forwards;
+        opacity: 0;
+      }
+
+
+      /* Custom utility to hide scrollbars */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Custom Textarea Scrollbar */
+      textarea::-webkit-scrollbar {
+        width: 8px;
+      }
+      textarea::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 4px;
+      }
+      textarea::-webkit-scrollbar-thumb {
+        background-color: #3f3f46; /* zinc-700 */
+        border-radius: 4px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+      }
+      textarea::-webkit-scrollbar-thumb:hover {
+        background-color: #52525b; /* zinc-600 */
+      }
+      textarea {
+        scrollbar-width: thin;
+        scrollbar-color: #3f3f46 transparent; /* zinc-700 and transparent */
+      }
+      
+      /* Fix for chat input placeholder alignment */
+      .chat-input-container:has(textarea:placeholder-shown) {
+        align-items: center;
+      }
+
+      body {
+        overscroll-behavior: none;
+      }
+    </style>
+  <!-- MathJax configuration is now handled in the React components -->
+  <!-- TailwindCSS configuration now in tailwind.config.js -->
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-zinc-950 font-sans text-zinc-200">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Callback - FLOCORE AI</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 400px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin: 0 0 10px;
+            font-weight: 600;
+        }
+        
+        p {
+            color: #a1a1aa;
+            margin: 0 0 20px;
+            line-height: 1.5;
+        }
+        
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .status.loading {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .close-info {
+            font-size: 14px;
+            color: #71717a;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">FC</div>
+        <h1>FLOCORE AI</h1>
+        <p>Processing your Google Workspace authorization...</p>
+        
+        <div id="status" class="status loading">
+            <div class="spinner"></div>
+            <span>Connecting to Google Workspace...</span>
+        </div>
+        
+        <p class="close-info">This window will close automatically.</p>
+    </div>
+
+    <script>
+        // Extract authorization code or error from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+        
+        const statusElement = document.getElementById('status');
+        
+        if (error) {
+            // Handle OAuth error
+            statusElement.className = 'status error';
+            statusElement.innerHTML = `
+                <span>❌</span>
+                <span>Authentication failed: ${errorDescription || error}</span>
+            `;
+            
+            // Send error to parent window
+            if (window.opener) {
+                window.opener.postMessage({
+                    type: 'GOOGLE_AUTH_ERROR',
+                    error: error,
+                    errorDescription: errorDescription
+                }, window.location.origin);
+            }
+            
+            // Close window after delay
+            setTimeout(() => {
+                window.close();
+            }, 3000);
+            
+        } else if (code) {
+            // Handle successful authorization
+            statusElement.className = 'status success';
+            statusElement.innerHTML = `
+                <span>✅</span>
+                <span>Authorization successful!</span>
+            `;
+            
+            // Send code to parent window
+            if (window.opener) {
+                window.opener.postMessage({
+                    type: 'GOOGLE_AUTH_SUCCESS',
+                    code: code
+                }, window.location.origin);
+            }
+            
+            // Close window after short delay
+            setTimeout(() => {
+                window.close();
+            }, 1500);
+            
+        } else {
+            // Handle missing parameters
+            statusElement.className = 'status error';
+            statusElement.innerHTML = `
+                <span>❌</span>
+                <span>Invalid callback - missing authorization code</span>
+            `;
+            
+            // Send error to parent window
+            if (window.opener) {
+                window.opener.postMessage({
+                    type: 'GOOGLE_AUTH_ERROR',
+                    error: 'invalid_callback',
+                    errorDescription: 'Missing authorization code in callback URL'
+                }, window.location.origin);
+            }
+            
+            // Close window after delay
+            setTimeout(() => {
+                window.close();
+            }, 3000);
+        }
+        
+        // Fallback: close window if no parent communication worked
+        setTimeout(() => {
+            if (window.opener) {
+                window.close();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

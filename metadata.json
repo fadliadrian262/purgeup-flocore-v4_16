@@ -1,0 +1,9 @@
+{
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "name": "PURGEUP_FLOCORE_V4_16",
+  "description": "cleaning the codebase\n",
+  "prompt": ""
+}
